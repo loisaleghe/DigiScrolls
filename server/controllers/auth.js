@@ -1,19 +1,72 @@
-const jwt = require('jsonwebtoken');
-const expressJwt = require('express-jwt');
+const jwt = require("jsonwebtoken");
+const expressJwt = require("express-jwt");
 
-exports.login = (req, res) => {
-    const { name, password } = req.body;
-    if (password === process.env.PASSWORD) {
-        // generate token and send to client/react
-        const token = jwt.sign({ name }, process.env.JWT_SECRET, { expiresIn: '1d' });
-        return res.json({ token, name });
-    } else {
-        return res.status(400).json({
-            error: 'Incorrect password!'
-        });
+const User = require("../models/User");
+
+exports.register = async (req, res) => {
+  try {
+    const { username, password, email } = req.body;
+
+    //check if username and email don't exist
+    const usernameExist = await User.findOne({ username: username });
+    if (usernameExist) {
+      return res.status(403).json({ message: "Username already exist" });
     }
+
+    const emailExist = await User.findOne({ email: email });
+
+    if (emailExist) {
+      return res.status(403).json({ message: "Email entered already exists" });
+    }
+
+    //create a new user
+    const user = new User({ username, email, password });
+    //Save User to database
+    await user.save();
+
+    //Generate a token for user that expires after one day for security purposes
+    const token = jwt.sign({ user: user.id }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
+
+    return res.json({ token });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json(error.errors);
+  }
+};
+exports.login = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    //fetch the user from database
+    const user = await User.findOne({ username });
+
+    //if user does not exists
+    if (!user) {
+      return res.status(404).json({ message: "Username or Password is incorrect" });
+    }
+
+    const passwordMatched = await user.comparePassword(password);
+
+    if (!passwordMatched) {
+      return res
+        .status(400)
+        .json({ message: "Username or Password is incorrect" });
+    }
+
+    //Generate a token for user that expires after one day for security purposes
+    const token = jwt.sign({ user: user.id }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
+
+    return res.json({ token });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json(error.errors);
+  }
 };
 
-exports.requireSignin = expressJwt({
-    secret: process.env.JWT_SECRET
-});
+// exports.requireSignin = expressJwt({
+//     secret: process.env.JWT_SECRET
+// });

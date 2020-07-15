@@ -23,7 +23,7 @@ const postSchema = new mongoose.Schema(
             max: 150
         },
         author: {
-            type: Schema.Types.ObjectId, ref: 'User'
+            type: mongoose.Schema.Types.ObjectId, ref: 'User'
         }
     },
     { timestamps: true }
