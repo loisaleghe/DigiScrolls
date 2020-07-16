@@ -29,7 +29,7 @@ exports.register = async (req, res) => {
       expiresIn: "1d",
     });
 
-    return res.json({ token });
+    return res.header("x-auth", token).json({ token });
   } catch (error) {
     console.log(error);
     return res.status(400).json(error.errors);
@@ -44,7 +44,9 @@ exports.login = async (req, res) => {
 
     //if user does not exists
     if (!user) {
-      return res.status(404).json({ message: "Username or Password is incorrect" });
+      return res
+        .status(404)
+        .json({ message: "Username or Password is incorrect" });
     }
 
     const passwordMatched = await user.comparePassword(password);
@@ -60,13 +62,24 @@ exports.login = async (req, res) => {
       expiresIn: "1d",
     });
 
-    return res.json({ token });
+    return res.header("x-auth", token).json({ token });
   } catch (error) {
     console.log(error);
     return res.status(400).json(error.errors);
   }
 };
 
-// exports.requireSignin = expressJwt({
-//     secret: process.env.JWT_SECRET
-// });
+exports.currentUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.user, "-password -__v");
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    return res.json(user);
+  } catch (error) {
+    console.error(error);
+    return res.status(400).send("An error has occured");
+  }
+};

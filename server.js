@@ -4,7 +4,7 @@ const cors = require("cors");
 require("dotenv").config();
 
 // import routes
-const postRoutes = require("./routes/post");
+const notesRoutes = require("./routes/notes");
 const authRoutes = require("./routes/auth");
 
 // app
@@ -27,7 +27,7 @@ mongoose
   .catch((err) => console.log(err));
 
 // route middleware
-app.use("/api", postRoutes);
+app.use("/api/notes", notesRoutes);
 app.use("/api", authRoutes);
 
 // port
