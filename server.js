@@ -1,8 +1,6 @@
 const express = require("express");
-const morgan = require("morgan");
-const bodyParser = require("body-parser");
-const cors = require("cors");
 const mongoose = require("mongoose");
+const cors = require("cors");
 require("dotenv").config();
 
 // import routes
@@ -11,6 +9,11 @@ const authRoutes = require("./routes/auth");
 
 // app
 const app = express();
+
+// middlewares
+app.use(cors());
+app.use(express.json({ extended: false }));
+app.use(express.urlencoded({ extended: false }));
 
 // db
 mongoose
@@ -22,14 +25,6 @@ mongoose
   })
   .then(() => console.log("DB connected"))
   .catch((err) => console.log(err));
-
-// middlewares
-app.use(express.json({ extended: false }));
-app.use(express.urlencoded({ extended: false }));
-
-// app.use(cors());
-// app.use(morgan('dev'));
-// app.use(bodyParser.json());
 
 // route middleware
 app.use("/api", postRoutes);
