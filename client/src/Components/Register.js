@@ -1,27 +1,22 @@
 import React, { useRef } from "react";
-import axios from "axios";
+import { register } from "../actions/auth";
+import { useDispatch } from "react-redux";
 
 export default function Register(props) {
   const usernameInput = useRef();
   const passwordInput = useRef();
   const confirmPasswordEmail = useRef();
   const emailInput = useRef();
+  const dispatch = useDispatch(); //to dispatch our actions to users
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const username = usernameInput.current.value;
     const password = passwordInput.current.value;
     const email = emailInput.current.value;
     const userParams = { username, password, email };
-    axios
-      .post(`/register`, userParams)
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    await dispatch(register(userParams));
   };
 
   return (

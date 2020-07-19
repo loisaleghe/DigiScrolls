@@ -1,6 +1,6 @@
 body {
-  background-color: aqua;
-  background-image: url("/scroll1.jpeg");
+  background-color: black;
+  /* background-image: url("/scroll1.jpeg"); */
   background-size: cover;
   background-repeat: no-repeat;
 }
@@ -30,10 +30,6 @@ a.nav-link {
   font-family: "Fugaz One", cursive;
 }
 
-/* @media (min-width: 320px) {
-  body {
-    background-size: cover;
-    background-position: center;
-    
-  }
-} */
+.home-page {
+  background-image: none !important;
+}

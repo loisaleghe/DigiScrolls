@@ -1,8 +1,12 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import { Logout, logout } from "../actions/auth";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Nav() {
+  const { isAuthenticated } = useSelector((state) => state.auth);
   const location = useLocation();
+  const dispatch = useDispatch();
   return (
     <nav className="navbar navbar-expand-lg ">
       <Link
@@ -15,6 +19,18 @@ export default function Nav() {
       >
         DIGI-SCROLL
       </Link>
+      {isAuthenticated && (
+        <Link
+          className="nav-link"
+          to="/"
+          onClick={() => {
+            dispatch(logout());
+          }}
+        >
+          {" "}
+          LOGOUT
+        </Link>
+      )}
     </nav>
   );
 }

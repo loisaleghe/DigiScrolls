@@ -1,25 +1,22 @@
 import React, { useRef } from "react";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../actions/auth";
 
 export default function Login(props) {
   const usernameInput = useRef();
   const passwordInput = useRef();
 
-  const handleSubmit = (event) => {
+  const dispatch = useDispatch(); //to dispatch our actions to users
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const username = usernameInput.current.value;
     const password = passwordInput.current.value;
     const userParams = { username, password };
-    axios
-      .post(`/login`, userParams)
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    await dispatch(login(userParams));
   };
+
   return (
     <div className="card bg-light mb-3 justify-content-end">
       <div className="card-header">LOGIN</div>

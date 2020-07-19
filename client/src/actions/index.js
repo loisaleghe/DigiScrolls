@@ -1,0 +1,16 @@
+//auth Actions
+
+export const SET_CURRENT_USER = "SET_CURRENT_USER";
+export const REMOVE_CURRENT_USER = "REMOVE_CURRENT_USER";
+export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
+export const REGISTER_FAIL = "REGISTER_FAIL";
+export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
+export const LOGIN_FAIL = "LOGIN_FAIL";
+export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
+export const AUTH_LOADING = "AUTH_LOADING";
+
+//notes Actions
+export const GET_NOTES = "GET_NOTES";
+export const GET_CURRENT_USER_NOTES = "GET_CURRENT_USER_NOTES";
+export const GET_GROUP_NOTES = "GET_GROUP_NOTES";
+export const NOTES_LOADING = "NOTES_LOADING";
