@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Logout, logout } from "../actions/auth";
+import { logout } from "../actions/auth";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function Nav() {

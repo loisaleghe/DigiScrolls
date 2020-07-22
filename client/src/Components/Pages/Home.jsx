@@ -1,29 +1,52 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import axios from "axios";
+import swal from "sweetalert";
 import {
   VerticalTimeline,
   VerticalTimelineElement,
 } from "react-vertical-timeline-component";
 import "react-vertical-timeline-component/style.min.css";
 import Footer from "../Footer";
-export default function Home() {
-  const fetchUserNotes = () => {
-    axios.get("/notes/current/author").then((result) => {
-      setNotes(result.data);
-    });
-  };
+import { getCurrentUserNote, getNote } from "../../actions/notes";
+import EditModal from "../EditModal";
+import { GET_NOTE } from "../../actions";
+import { deleteNote } from "../../actions/notes";
 
-  const [notes, setNotes] = useState([]);
+export default function Home() {
+  const [showEditModal, setShowEditModal] = useState(false);
+  const toggleEditModal = () => setShowEditModal(!showEditModal);
+  const closeEditModal = () => setShowEditModal(false);
+  const dispatch = useDispatch(); //to dispatch our actions to users
+  const { currentUserNotes } = useSelector((state) => state.notes);
 
   useEffect(() => {
-    fetchUserNotes();
+    dispatch(getCurrentUserNote());
   }, []);
+
+  const onEditNote = async (noteId) => {
+    await dispatch(getNote(noteId));
+    setShowEditModal(true);
+  };
+
+  const onDeleteNote = async (noteId) => {
+    const response = await swal({
+      title: "Are you sure?",
+      text: "You won't be able to recover this note once deleted!",
+      icon: "warning",
+      buttons: { cancel: "Cancel", confirm: "Yes" },
+    });
+
+    if (response) {
+      await dispatch(deleteNote(noteId));
+    }
+  };
   return (
     <>
       <div className="home-page">
         <VerticalTimeline layout="1-column">
-          {notes.map((note) => (
+          {currentUserNotes.map((note) => (
             <div key={note._id}>
               <VerticalTimelineElement
                 className="vertical-timeline-element--work  mb-0"
@@ -50,12 +73,14 @@ export default function Home() {
                 <p>{note.content}</p>
                 <div className="text-right pb-2">
                   <button
+                    onClick={() => onEditNote(note._id)}
                     type="button"
                     className="btn btn-outline-primary btn-sm m-2"
                   >
                     <i className="fa fa-pencil fa-lg" aria-hidden="true"></i>
                   </button>
                   <button
+                    onClick={() => onDeleteNote(note._id)}
                     type="button"
                     className="btn btn-outline-danger btn-sm m-2"
                   >
@@ -64,12 +89,13 @@ export default function Home() {
                 </div>
               </VerticalTimelineElement>
               <p className="text-right pr-2 text-muted small pt-2">
-                {moment(new Date()).toString()}
+                {moment(note.createdAt).toString()}
               </p>
             </div>
           ))}
         </VerticalTimeline>
       </div>
+      <EditModal show={showEditModal} toggle={toggleEditModal} />
 
       <Footer />
     </>

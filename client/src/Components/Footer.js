@@ -1,8 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import CreateModal from "./CreateModal";
+import { setCurrentUser } from "../actions/auth";
 export default function Footer() {
+  const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const toggleModal = () => setShowModal(!showModal);
+  const {
+    user: { username },
+  } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    dispatch(setCurrentUser());
+  }, []);
   return (
     <>
       <div
@@ -23,7 +33,7 @@ export default function Footer() {
             width="50px"
           />
 
-          <span className="p-2">Loisaleghe</span>
+          <span className="p-2">{username}</span>
           <button
             type="button"
             className="btn btn-outline-dark  float-right"

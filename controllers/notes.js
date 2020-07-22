@@ -6,7 +6,7 @@ exports.create = async (req, res) => {
     const _author = req.user;
     const noteFields = {};
     if (title) noteFields.title = title.trim();
-    if (content) noteFields.content = title.trim();
+    if (content) noteFields.content = content.trim();
     noteFields._author = _author;
     const newNote = new Note(noteFields);
     await newNote.save();
@@ -47,7 +47,7 @@ exports.deleteNote = async (req, res) => {
     if (!noteToDelete) {
       return res.status(404).json({ message: "Could not find note delete" });
     }
-    return res.json({ message: "The note was deleted" });
+    return res.json(noteToDelete);
   } catch (error) {
     console.log(error);
     return res.status(400).json(error.errors);
@@ -91,7 +91,9 @@ exports.findNotesForUser = async (req, res) => {
 
 exports.findNotesForCurrentUser = async (req, res) => {
   try {
-    const findNotes = await Note.find({ _author: req.user });
+    const findNotes = await Note.find({ _author: req.user }).sort({
+      createdAt: -1,
+    });
     return res.json(findNotes);
   } catch (error) {
     console.log(error);

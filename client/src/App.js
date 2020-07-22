@@ -1,11 +1,6 @@
 import React, { useEffect } from "react";
 import axios from "axios";
-import {
-  BrowserRouter as Router,
-  Route,
-  Redirect,
-  Switch,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Nav from "./Components/Nav";
 import Landing from "./Components/Pages/Landing";
 import Home from "./Components/Pages/Home";

@@ -1,26 +1,30 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-import axios from "axios";
+import { useDispatch } from "react-redux";
+import { createUserNote } from "../actions/notes";
+import swal from "sweetalert";
 
 export default function CreateModal({ show, toggle }) {
   const titleInput = useRef();
   const contentInput = useRef();
+  const dispatch = useDispatch();
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("hi");
     const title = titleInput.current.value;
     const content = contentInput.current.value;
-    const userParams = { title, content };
-    axios
-      .post(`/notes`, userParams)
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    const noteParams = { title, content };
+    dispatch(createUserNote(noteParams));
+    toggle();
+    swal({
+      title: "Success!",
+      text: "Note added successfully",
+      icon: "success",
+    });
   };
+
+  useEffect(() => {}, []);
+
   return (
     <>
       <Modal isOpen={show} toggle={toggle}>
