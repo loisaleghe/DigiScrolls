@@ -29,10 +29,12 @@ export default function Landing() {
   }
 
   return (
-    <div className="row">
-      <div className="col col-sm-4 offset-sm-4 landing-container">
-        {showLogin && <Login setVisible={showHideAuth} />}
-        {showRegister && <Register setVisible={showHideAuth} />}
+    <div className="loginPage">
+      <div className="row">
+        <div className="col col-sm-4 offset-sm-4 landing-container">
+          {showLogin && <Login setVisible={showHideAuth} />}
+          {showRegister && <Register setVisible={showHideAuth} />}
+        </div>
       </div>
     </div>
   );
