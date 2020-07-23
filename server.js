@@ -10,6 +10,10 @@ const authRoutes = require("./routes/auth");
 // app
 const app = express();
 
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+}
+
 // middlewares
 app.use(cors());
 app.use(express.json({ extended: false }));
