@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
-import axios from "axios";
 import swal from "sweetalert";
 import {
   VerticalTimeline,

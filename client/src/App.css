@@ -5,6 +5,18 @@ body {
   background-repeat: no-repeat;
 }
 
+.loginPage {
+  width: 100vw;
+  height: 100vh;
+  background-image: url("/scroll1.jpeg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.loginRow {
+  margin-top: 15%;
+}
+
 nav {
   background: transparent;
   font-weight: bolder;

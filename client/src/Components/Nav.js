@@ -7,6 +7,7 @@ export default function Nav() {
   const { isAuthenticated } = useSelector((state) => state.auth);
   const location = useLocation();
   const dispatch = useDispatch();
+
   return (
     <nav className="navbar navbar-expand-lg ">
       <Link
