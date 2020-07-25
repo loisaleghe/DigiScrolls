@@ -7,6 +7,7 @@ import {
   LOGIN_FAIL,
   AUTH_LOADING,
   LOGOUT_SUCCESS,
+  RESET_AUTH_STATE,
 } from "../actions";
 
 const initialState = {
@@ -56,7 +57,7 @@ export default (state = initialState, { type, payload }) => {
         success: false,
         isAuthenticated: false,
         loading: false,
-        message: "Login Failed",
+        message: payload,
       };
     case REGISTER_SUCCESS:
       localStorage.setItem("x-auth", payload.token);
@@ -77,7 +78,7 @@ export default (state = initialState, { type, payload }) => {
         success: false,
         isAuthenticated: false,
         loading: false,
-        message: "Registration Failed",
+        message: payload,
       };
     case LOGOUT_SUCCESS:
       localStorage.removeItem("x-auth");
@@ -95,6 +96,14 @@ export default (state = initialState, { type, payload }) => {
         ...state,
         loading: true,
         message: "",
+      };
+
+    case RESET_AUTH_STATE:
+      return {
+        ...state,
+        loading: false,
+        message: "",
+        success: false,
       };
     default:
       return state;

@@ -7,6 +7,7 @@ import {
   LOGOUT_SUCCESS,
   REGISTER_FAIL,
   REGISTER_SUCCESS,
+  RESET_AUTH_STATE,
 } from "./index";
 import axios from "axios";
 
@@ -24,7 +25,7 @@ export const login = (userParams) => async (dispatch) => {
   } catch (error) {
     console.log(error);
 
-    await dispatch({ type: LOGIN_FAIL });
+    await dispatch({ type: LOGIN_FAIL, payload: error.response.data.message });
   }
 };
 
@@ -59,6 +60,13 @@ export const register = (userParams) => async (dispatch) => {
   } catch (error) {
     console.log(error);
 
-    await dispatch({ type: REGISTER_FAIL });
+    await dispatch({
+      type: REGISTER_FAIL,
+      payload: error.response.data.message,
+    });
   }
+};
+
+export const resetAuthState = () => async (dispatch) => {
+  await dispatch({ type: RESET_AUTH_STATE });
 };

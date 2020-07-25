@@ -8,6 +8,7 @@ export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAIL = "LOGIN_FAIL";
 export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
 export const AUTH_LOADING = "AUTH_LOADING";
+export const RESET_AUTH_STATE = "RESET_AUTH_STATE";
 
 //notes Actions
 export const GET_NOTE = "GET_NOTE";

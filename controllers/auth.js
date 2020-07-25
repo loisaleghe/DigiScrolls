@@ -31,8 +31,8 @@ exports.register = async (req, res) => {
 
     return res.header("x-auth", token).json({ token });
   } catch (error) {
-    console.log(error);
-    return res.status(400).json(error.errors);
+    // console.log(error);
+    return res.status(400).json({ message: "Could not register user" });
   }
 };
 exports.login = async (req, res) => {
@@ -65,7 +65,9 @@ exports.login = async (req, res) => {
     return res.header("x-auth", token).json({ token });
   } catch (error) {
     console.log(error);
-    return res.status(400).json(error.errors);
+    return res
+      .status(400)
+      .json({ message: "Username or Password is incorrect" });
   }
 };
 

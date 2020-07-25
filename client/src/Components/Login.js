@@ -1,12 +1,14 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../actions/auth";
+import { login, resetAuthState } from "../actions/auth";
+import swal from "sweetalert";
 
 export default function Login(props) {
   const usernameInput = useRef();
   const passwordInput = useRef();
 
   const dispatch = useDispatch(); //to dispatch our actions to users
+  const { success, message } = useSelector((state) => state.auth);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -16,7 +18,15 @@ export default function Login(props) {
     const userParams = { username, password };
     await dispatch(login(userParams));
   };
-
+  useEffect(() => {
+    if (!success && message.length > 0) {
+      swal({
+        title: "Oops!",
+        text: message,
+        icon: "error",
+      }).then(() => dispatch(resetAuthState()));
+    }
+  }, [success, message]);
   return (
     <div className="row  justify-content-center loginRow">
       <div className="card bg-light mb-3 justify-content-end">
@@ -25,7 +35,12 @@ export default function Login(props) {
           <form onSubmit={handleSubmit}>
             <div className="form-group name">
               <label htmlFor="inputName">Username</label>
-              <input ref={usernameInput} type="text" className="form-control" />
+              <input
+                ref={usernameInput}
+                type="text"
+                className="form-control"
+                required
+              />
             </div>
             <div className="form-group passwrd">
               <label htmlFor="exampleInputPassword1">Password</label>
@@ -34,18 +49,10 @@ export default function Login(props) {
                 type="password"
                 className="form-control"
                 id="exampleInputPassword1"
+                required
               />
             </div>
-            <div className="form-group form-check">
-              <input
-                type="checkbox"
-                className="form-check-input"
-                id="exampleCheck1"
-              />
-              <label className="form-check-label" htmlFor="exampleCheck1">
-                Check me out
-              </label>
-            </div>
+
             <button type="submit" className="btn btn-primary btn-block mb-4">
               Submit
             </button>

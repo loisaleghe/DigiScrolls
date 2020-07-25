@@ -1,6 +1,7 @@
-import React, { useRef } from "react";
-import { register } from "../actions/auth";
-import { useDispatch } from "react-redux";
+import React, { useRef, useEffect } from "react";
+import { register, resetAuthState } from "../actions/auth";
+import { useDispatch, useSelector } from "react-redux";
+import swal from "sweetalert";
 
 export default function Register(props) {
   const usernameInput = useRef();
@@ -8,6 +9,8 @@ export default function Register(props) {
   const confirmPasswordEmail = useRef();
   const emailInput = useRef();
   const dispatch = useDispatch(); //to dispatch our actions to users
+
+  const { success, message } = useSelector((state) => state.auth);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -19,6 +22,16 @@ export default function Register(props) {
     await dispatch(register(userParams));
   };
 
+  useEffect(() => {
+    if (!success && message.length > 0) {
+      swal({
+        title: "Oops!",
+        text: message,
+        icon: "error",
+      }).then(() => dispatch(resetAuthState()));
+    }
+  }, [success, message]);
+
   return (
     <div className="">
       <div className="card bg-light mb-3 justify-content-center loginRow">
@@ -27,7 +40,12 @@ export default function Register(props) {
           <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label htmlFor="inputName">Username</label>
-              <input ref={usernameInput} type="text" className="form-control" />
+              <input
+                ref={usernameInput}
+                type="text"
+                className="form-control"
+                required
+              />
             </div>
             <div className="form-group">
               <label htmlFor="exampleInputEmail1">Email address</label>
@@ -37,6 +55,7 @@ export default function Register(props) {
                 className="form-control"
                 id="exampleInputEmail1"
                 aria-describedby="emailHelp"
+                required
               />
               <small id="emailHelp" className="form-text text-muted">
                 We'll never share your email with anyone else.
@@ -50,6 +69,7 @@ export default function Register(props) {
                 type="password"
                 className="form-control"
                 id="exampleInputPassword1"
+                required
               />
             </div>
 
@@ -60,18 +80,10 @@ export default function Register(props) {
                 type="password"
                 className="form-control"
                 id="exampleInputPassword2"
+                required
               />
             </div>
-            <div className="form-group form-check">
-              <input
-                type="checkbox"
-                className="form-check-input"
-                id="exampleCheck1"
-              />
-              <label className="form-check-label" htmlFor="exampleCheck1">
-                Check me out
-              </label>
-            </div>
+
             <button type="submit" className="btn btn-primary btn-block mb-4">
               Submit
             </button>
